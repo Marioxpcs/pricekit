@@ -1,0 +1,3 @@
+[run]
+source = pricekit
+relative_files = True
