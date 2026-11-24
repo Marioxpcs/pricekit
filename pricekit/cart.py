@@ -32,7 +32,7 @@ def calculate_total(items, customer_type, coupon, country, debug):
 
 def load_cart(path):
     try:
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
-    except:
+    except (FileNotFoundError, json.JSONDecodeError):
         return []

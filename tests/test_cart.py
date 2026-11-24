@@ -1,4 +1,4 @@
-from pricekit.cart import calculate_total
+from pricekit.cart import calculate_total, load_cart
 
 
 def test_member_bulk_discount():
@@ -19,3 +19,15 @@ def test_coupon_save10():
 def test_canada_tax():
     items = [{"price": 100, "qty": 1}]
     assert calculate_total(items, "guest", None, "CA", False) == 113.0
+
+def test_load_cart_valid(tmp_path):
+    f = tmp_path / "cart.json"
+    f.write_text('[{"price": 1, "qty": 1}]', encoding="utf-8")
+    assert load_cart(str(f)) == [{"price": 1, "qty": 1}]
+
+
+def test_load_cart_missing_and_invalid(tmp_path):
+    assert load_cart(str(tmp_path / "nope.json")) == []
+    bad = tmp_path / "bad.json"
+    bad.write_text("not json", encoding="utf-8")
+    assert load_cart(str(bad)) == []
